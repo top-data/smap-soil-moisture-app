@@ -1,0 +1,8 @@
+project idea/plan: to build a web app that can fetch a given band from
+a given satellite product for a given map area in the front-end. Then, show it as a layer
+in a dynamic map. 
+
+inputs from user in the front-end: 
+ - satellite product
+ - satellite band
+ - map area (can be a bounding box or a polygon)
