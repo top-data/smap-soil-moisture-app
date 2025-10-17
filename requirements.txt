@@ -1,15 +1,4 @@
-## Minimal requirements for deployment of the Streamlit app
-# This `requirements.txt` contains only the runtime packages imported by `app.py`.
-# Versions are chosen conservatively based on the project's previous file and
-# common compatibility. Adjust pins if you have specific constraints.
-
-streamlit==1.50.0
-earthengine-api==0.1.377
+earthengine_api==1.6.12
+ee==0.2
 geemap==0.36.4
-folium==0.20.0
-streamlit-folium==0.25.3
-oauth2client==4.1.3
-
-# Optional: tiny utilities sometimes required by geemap/folium
-branca==0.8.2
-eval_type_backport==0.2.2
+streamlit==1.50.0
