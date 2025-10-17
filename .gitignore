@@ -18,3 +18,12 @@ Thumbs.db
 
 # Local secrets
 secrets/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# notebook files
+*.ipynb
+
+# Earth Engine credentials
+ee-service-account.json

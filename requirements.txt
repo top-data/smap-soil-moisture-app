@@ -3,3 +3,4 @@ geemap>=0.36.4
 leafmap>=0.53.3
 earthengine-api>=1.4.8
 folium
+streamlit_folium>=0.25.3

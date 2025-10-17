@@ -1,41 +1,66 @@
 import streamlit as st
-import geemap.foliumap as geemap
 import ee
+import geemap.foliumap as geemap
+import datetime
+
+
+import ee
+import streamlit as st
+import tempfile
 import json
-import os
 
-st.set_page_config(page_title="SMAP Soil Moisture Map", layout="wide")
-st.title("SMAP Soil Moisture Viewer")
+service_account = st.secrets["service_account"]
+json_data = st.secrets["json_data"]
 
-# -----------------------------
-# Earth Engine authentication
-# -----------------------------
-# Streamlit Cloud secret: EE_CREDENTIALS
-ee_credentials = os.environ.get("EE_CREDENTIALS")
+# Write service account JSON to a temp file
+with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.json') as f:
+    f.write(json_data)
+    key_path = f.name
 
-if ee_credentials is None:
-    st.error("EE_CREDENTIALS not found! Please set your Streamlit secret.")
-    st.stop()
+credentials = ee.ServiceAccountCredentials(service_account, key_path)
+ee.Initialize(credentials, project='ee-mhdsaki')
+print("✅ Earth Engine initialized successfully.")
 
-# Write JSON to temp file
-service_account_path = "/tmp/ee-service-account.json"
-with open(service_account_path, "w") as f:
-    json.dump(json.loads(ee_credentials), f)
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = service_account_path
-ee.Initialize()
+# --- Streamlit title ---
+st.title("🌍 SMAP Soil Moisture Viewer (Surface & Rootzone)")
 
-# -----------------------------
-# Create Map
-# -----------------------------
-Map = geemap.Map(center=[0, 0], zoom=2)
+# --- Define dataset and bands ---
+smap_product = 'NASA/SMAP/SPL4SMGP/008'
+smap_bands = {
+    'Surface Soil Moisture': 'sm_surface',
+    'Rootzone Soil Moisture': 'sm_rootzone'
+}
 
-smap_product = 'NASA/SMAP/SPL4SMGP/007'
-smap_bands = ['sm_surface', 'sm_rootzone']
+# --- Sidebar date selection ---
+st.sidebar.header("🗓️ Date Range")
+end_date = st.sidebar.date_input("End Date", datetime.date.today())
+start_date = st.sidebar.date_input("Start Date", end_date - datetime.timedelta(days=3))
 
-dataset = ee.ImageCollection(smap_product).select(smap_bands).first()
+# --- Load SMAP data ---
+collection = ee.ImageCollection(smap_product).filterDate(str(start_date), str(end_date))
+image = collection.sort('system:time_start', False).first()
 
-for band in smap_bands:
-    Map.addLayer(dataset.select(band), {}, band)
+# --- Create map ---
+Map = geemap.Map(center=[0, 0], zoom=2, ee_initialize=False)
 
-Map.to_streamlit(height=700)
+# --- Add layers ---
+for name, band in smap_bands.items():
+    vis_params = {
+        'min': 0,
+        'max': 0.5,
+        'palette': ['#d7191c', '#fdae61', '#ffffbf', '#abd9e9', '#2c7bb6']
+    }
+    Map.add_layer(image.select(band), vis_params, name)
+
+Map.add_layer_control()
+
+# --- Display map ---
+Map.to_streamlit(height=600)
+
+st.sidebar.info("""
+This app visualizes **SMAP L4 Global Soil Moisture (9-km, 3-hourly)** data.  
+Select a date range and toggle between:
+- Surface Soil Moisture  
+- Rootzone Soil Moisture  
+""")

@@ -1,8 +1,6 @@
-project idea/plan: to build a web app that can fetch a given band from
-a given satellite product for a given map area in the front-end. Then, show it as a layer
-in a dynamic map. 
+A minimal deployable working example in Python + Streamlit 
+that fetches SMAP L4 Global soil moisture data (SPL4SMGP.008) 
+and displays the surface and rootzone soil moisture bands on an interactive map with selectable layers.
 
-inputs from user in the front-end: 
- - satellite product
- - satellite band
- - map area (can be a bounding box or a polygon)
+store the earth_engine service_account to an evironment variable locally
+then shoould be storable in github variable

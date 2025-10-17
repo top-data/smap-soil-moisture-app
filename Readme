@@ -1,0 +1,83 @@
+# SMAP Soil Moisture — Streamlit + Google Earth Engine
+
+Minimal deployable example that fetches SMAP L4 soil moisture (SPL4SMGP.008) and displays surface & rootzone bands on an interactive map.
+
+## Contents
+- app.py — Streamlit app
+- notebook.ipynb — exploratory notebook
+- requirements.txt — Python deps
+- Dockerfile — container image
+- .streamlit/secrets.toml — store Earth Engine service account JSON (not committed)
+- .gitignore — excludes .venv and secrets
+
+## Prerequisites
+- Python 3.10+ (tested with 3.11)
+- git
+- Docker (optional)
+- Google Cloud service account with Earth Engine access and a JSON key
+
+## Setup (Windows)
+1. Create and activate virtualenv:
+   ```
+   python -m venv .venv
+   .venv\Scripts\activate
+   ```
+
+2. Install requirements:
+   ```
+   pip install --upgrade pip
+   pip install -r requirements.txt
+   ```
+
+3. Configure secrets (local only)
+   - Create `.streamlit/secrets.toml` (do NOT commit). Use triple-single-quotes to wrap the JSON:
+     ```toml
+     json_data = '''
+     {
+       "type": "service_account",
+       "project_id": "your-project-id",
+       "private_key_id": "...",
+       "private_key": "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n",
+       "client_email": "sa@your-project.iam.gserviceaccount.com",
+       ...
+     }
+     '''
+     service_account = "sa@your-project.iam.gserviceaccount.com"
+     ```
+   - Ensure `private_key` contains `\n` escapes, not raw unescaped newlines.
+
+4. Run the app:
+   ```
+   streamlit run app.py
+   ```
+
+## Docker
+Build and run:
+```
+docker build -t smap-streamlit .
+docker run -p 8501:8501 --env-file .env smap-streamlit
+```
+(Place runtime secrets in `.env` or mount `.streamlit/secrets.toml` into the container; avoid committing secrets.)
+
+## GitHub
+1. git init; git add .; git commit -m "Initial"
+2. Create repo on GitHub, then:
+   ```
+   git remote add origin https://github.com/<user>/<repo>.git
+   git branch -M main
+   git push -u origin main
+   ```
+3. Add secrets in GitHub Actions / GitHub repo settings (do not commit keys).
+
+## Earth Engine notes & troubleshooting
+- Initialization: use oauth2client ServiceAccountCredentials.from_json_keyfile_dict(...) with the parsed JSON dict (do not pass the whole JSON string as a filename).
+- If you see:
+  - `json.decoder.JSONDecodeError: Extra data` — your secret value is not valid JSON or has extra quotes. Confirm `.streamlit/secrets.toml` uses triple-single-quotes and the JSON parses cleanly.
+  - `AttributeError: module 'ee.data' has no attribute '_credentials'` — version mismatch between geemap and earthengine-api. Try ensuring compatibility (e.g. earthengine-api 0.1.358 with a geemap version known to work) or upgrade both to versions that address the issue.
+  - `OSError` when writing credential file — avoid passing JSON string as filename; write to a temp file or use from_json_keyfile_dict.
+
+## Notes
+- Never commit service account JSON to the repo.
+- When running locally, `st.secrets` is available only when started with `streamlit run`. For Jupyter, load credentials from a local file or env var instead.
+
+If you want, I can add a CI/GitHub Actions workflow for deploying this app (will not store secrets in the repo).
