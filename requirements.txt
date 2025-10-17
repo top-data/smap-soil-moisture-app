@@ -1,4 +1,11 @@
-earthengine_api==1.6.12
-ee==0.2
+earthengine-api
 geemap==0.36.4
-streamlit==1.50.0
+ipykernel==7.0.1
+ipython-pygments-lexers==1.1.1
+leafmap==0.53.3
+oauth2client==4.1.3
+pip-chill==1.0.3
+pipreqs==0.5.0
+pysocks==1.7.1
+streamlit-folium==0.25.3
+tinycss2==1.4.0
