@@ -1,4 +1,20 @@
-.venv/
+# Python
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+.venv/
+env/
+venv/
+
+# OS files
 .DS_Store
+Thumbs.db
+
+# Streamlit logs
+.streamlit/
+
+# Local secrets
+secrets/

@@ -1,9 +1,5 @@
-ee==0.2
-geemap==0.36.4
-ipython-pygments-lexers==1.1.1
-leafmap==0.53.3
-pip-chill==1.0.3
-pipreqs==0.5.0
-pysocks==1.7.1
-streamlit==1.50.0
-tinycss2==1.4.0
+streamlit>=1.50.0
+geemap>=0.36.4
+leafmap>=0.53.3
+earthengine-api>=1.4.8
+folium
