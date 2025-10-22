@@ -10,9 +10,10 @@ import tempfile
 import json
 
 service_account = st.secrets["service_account"]
-json_data = st.secrets["json_data"]
+# json_data = st.secrets["json_data"]
+key_data = st.secrets["private_key"]
 
-credentials = ee.ServiceAccountCredentials(service_account, key_data = json_data)
+credentials = ee.ServiceAccountCredentials(service_account, key_data = key_data)
 ee.Initialize(credentials, project='ee-mhdsaki')
 # print("✅ Earth Engine initialized successfully.")
 
