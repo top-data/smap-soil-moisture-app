@@ -12,12 +12,7 @@ import json
 service_account = st.secrets["service_account"]
 json_data = st.secrets["json_data"]
 
-# Write service account JSON to a temp file
-with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.json') as f:
-    f.write(json_data)
-    key_path = f.name
-
-credentials = ee.ServiceAccountCredentials(service_account, key_path)
+credentials = ee.ServiceAccountCredentials(service_account, key_data = json_data)
 ee.Initialize(credentials, project='ee-mhdsaki')
 print("✅ Earth Engine initialized successfully.")
 
