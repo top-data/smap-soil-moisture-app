@@ -14,7 +14,7 @@ json_data = st.secrets["json_data"]
 
 credentials = ee.ServiceAccountCredentials(service_account, key_data = json_data)
 ee.Initialize(credentials, project='ee-mhdsaki')
-print("✅ Earth Engine initialized successfully.")
+# print("✅ Earth Engine initialized successfully.")
 
 
 # --- Streamlit title ---
