@@ -1,9 +1,17 @@
-# Minimal runtime requirements for deploying the app to Streamlit
-streamlit
-earthengine-api
-geemap
-oauth2client
-folium
-branca
-# optional but useful for Streamlit+folium integration
-streamlit-folium
+# # Minimal runtime requirements for deploying the app to Streamlit
+# streamlit
+# earthengine-api
+# geemap
+# oauth2client
+# folium
+# branca
+# # optional but useful for Streamlit+folium integration
+# streamlit-folium
+
+streamlit>=1.38.0
+earthengine-api>=0.1.400
+geemap>=0.32.0
+folium>=0.17.0
+branca>=0.7.0
+datetime
+oauth2client>=4.1.3
