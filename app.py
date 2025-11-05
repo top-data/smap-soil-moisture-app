@@ -31,7 +31,7 @@ smap_bands = {
 # --- Sidebar date selection ---
 st.sidebar.header("🗓️ Date Range")
 end_date = st.sidebar.date_input("End Date", datetime.date.today())
-start_date = st.sidebar.date_input("Start Date", end_date - datetime.timedelta(days=3))
+start_date = st.sidebar.date_input("Start Date", end_date - datetime.timedelta(days=7))
 
 # --- Load SMAP data ---
 collection = ee.ImageCollection(smap_product).filterDate(str(start_date), str(end_date))
